@@ -87,16 +87,26 @@ export class GitSearchComponent implements OnInit {
   //   this.router.navigate(['/search/'+ this.searchQuery] );
   // }
 
+
+  // Para que la función sendQuery funcione con nuestro nuevo Formulario reactivo, debemos reemplazar todas las instancias de this.modelen el método con this.form.value, que es el objeto que contiene todos los valores almacenados por el nuevo formulario.
+  // La razón de esto es que, a diferencia del Formulario controlado por plantillas, que utiliza un modelo simple para almacenar los datos, el Formulario reactivo crea un objeto completo que contiene toda la información sobre el formulario, incluida la validez, el estado del formulario y los valores, por lo que los valores están en una Propiedad separada del objeto formulario en sí.
   sendQuery = () => {
+    alert("entro en sendquery");
     this.searchResults=null;
-    let search : string=this.model.q;
+    // let search : string=this.model.q;
+    let search : string=this.form.value['q'];
+    
     let params : string = "";
     this.modelKeys.forEach( (elem) => {
+      console.log(this.form.value[elem]);
+
       if(elem === 'q') {
         return false;
       }
-      if(this.model[elem]) {
-        params += '+' + elem + ':' + this.model[elem];
+      // if(this.model[elem]) {
+        if(this.form.value[elem]) {
+        // params += '+' + elem + ':' + this.model[elem];
+        params += '+' + elem + ':' + this.form.value[elem];
       }
     });
 
@@ -105,7 +115,7 @@ export class GitSearchComponent implements OnInit {
       this.searchQuery=search + '+' + params;
     }
     this.displayQuery=this.searchQuery;
-
+    alert(this.searchQuery);
     this.gitSearch(this.searchQuery);
     // this.router.navigate(['/search/'+ this.searchQuery] );
   }
