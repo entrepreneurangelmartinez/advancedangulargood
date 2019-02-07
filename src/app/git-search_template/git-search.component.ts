@@ -3,7 +3,6 @@ import {GitSearchService} from '../git-search.service';
 import {GitSearch} from '../git-search';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {AdvancedSearchModel} from '../advanced-search-model';
-import {FormControl,FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-git-search',
@@ -16,20 +15,8 @@ export class GitSearchComponent implements OnInit {
   searchQuery: string;
   title: string;
   displayQuery: string;
-  form: FormGroup;
-  formControls= {};
   
-  constructor(private GitSearchService: GitSearchService, private route: ActivatedRoute, private router: Router) {
-    // En este punto, en nuestro constructor, vamos a recorrer nuestro this.modelKeysy crear FormControlelementos para cada uno de ellos envueltos en un objeto más grande.
-    // Esto creará un formControlsobjeto con todos los campos necesarios de nuestro modelo.
-    this.modelKeys.forEach((key)=> {
-      this.formControls[key]= new FormControl();
-    });
-
-    // Ahora, vamos a crear un FormGroup para nuestro formulario. Lo instanciaremos con el formControlsobjeto que acabamos de hacer.
-    // n este punto, ahora tenemos una forma reactiva inicializada con nuestro modelo. En nuestra próxima lección, lo adjuntaremos a nuestra plantilla y a nuestra Búsqueda de Git.
-    this.form = new FormGroup(this.formControls);
-   }
+  constructor(private GitSearchService: GitSearchService, private route: ActivatedRoute, private router: Router) { }
 
   model = new AdvancedSearchModel('', '', '', null, null, '');
   modelKeys= Object.keys(this.model) as Array<any>;
