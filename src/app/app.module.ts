@@ -7,6 +7,7 @@ import { RouterModule,Routes} from '@angular/router'
 import { AppComponent } from './app.component';
 
 import {GitSearchService} from './git-search.service';
+import {GitCodeSearchService} from './git-code-search.service';
 import { GitSearchComponent } from './git-search/git-search.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -74,7 +75,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule
   ],
   // providers: [service_name],
-  providers: [GitSearchService],
+  providers: [GitSearchService, GitCodeSearchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

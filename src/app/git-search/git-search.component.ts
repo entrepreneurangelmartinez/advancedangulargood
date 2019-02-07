@@ -61,8 +61,11 @@ export class GitSearchComponent implements OnInit {
     });
   }
 
+  // Ahora que tenemos nuestro servicio actualizado para usar RxJS, necesitamos actualizar nuestro componente para suscribirnos adecuadamente a nuestro Observable. Esto es similar a llamar a una promesa y usar la .then()función en ella, excepto que usa la subscribe()función en un Observable creado con RxJS. Convirtamos nuestra llamada de promesa en nuestro componente para usar RxJS en su lugar.
+  // Para cambiar su gitSearchllamada para usar RxJS, simplemente tenemos que cambiar la .then()llamada a a .subscribe(). Nada más debe cambiarse en este momento, el resto del código está bien.
   gitSearch = (query) => {
-    this.GitSearchService.gitSearch(this.searchQuery).then( (response) => {
+    // this.GitSearchService.gitSearch(this.searchQuery).then( (response) => {
+      this.GitSearchService.gitSearch(this.searchQuery).subscribe( (response) => {
       this.searchResults = response;
     }, (error) => {
       alert("Error: " + error.statusText)
