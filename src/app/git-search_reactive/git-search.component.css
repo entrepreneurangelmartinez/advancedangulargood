@@ -23,8 +23,9 @@
     font-size:18px;
 }
 
-/* rimero, vamos a agregar el CSS de validación que usamos en nuestros formularios reactivos. Abra su src/app/git-search/git-search.component.cssarchivo y su src/app/git-search_reactive/git-search.component.csscódigo de Visual Studio, y copie el código relacionado con las clases de validación de una a otra: */
-.ng-valid:not(form)  {
+/* ecesitamos agregar un bloque para mostrar si un campo es válido o no. */
+/* Angular agrega estas clases automáticamente a medida que cambia el estado de los campos de formulario, por lo que son útiles para indicar si un campo de formulario es inválido o válido. */
+.ng-valid  {
     border: 2px solid #42A948; /* green */
   }
   

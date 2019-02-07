@@ -34,24 +34,30 @@
 <!-- <button (click)="gitSearch()">Submit</button> -->
 <!-- <button (click)="sendQuery()">Submit</button> -->
 
-<!-- Bind a Reactive Form -->
-  <!-- Necesitamos modificar esto para usar el nuevo FormGroup. Para hacerlo, adjunte un [formGroup]enlace a la <form>etiqueta con el valor del formulario en su componente. Luego, agregue un formControlNameatributo que haga referencia al nombre del FormControlque hicimos, en este caso, la clave de la modelKeysiteración. -->
-
-<!-- <form>
+<!-- Finalmente, evitemos que el botón de envío se envíe cuando el formulario no es válido. Para hacer esto, primero necesitamos exportar el ngFormformulario a una variable usando el #signo con un nombre de variable después, con un valor de ngForm. -->
+<form #myForm="ngForm" (ngSubmit)="sendQuery()">
   <div *ngFor="let key of modelKeys">
-     {{key}}<input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]"/>
-  </div>
-  <button (click)="sendQuery()">Submit</button>
-  </form> -->
+      <!-- Los formularios controlados por plantillas siguen utilizando las mismas clases de validación que se aplican automáticamente como formularios reactivos. Una cosa que debemos asegurarnos de hacer es agregar el selector `not (form)`, ya que los formularios controlados por plantilla intentarán aplicar una clase válida a un formulario automáticamente. -->
+     {{key}}
+     <!-- <input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]"/> -->
+     <!-- Los formularios controlados por plantillas siguen utilizando las mismas clases de validación que se aplican automáticamente como formularios reactivos. Una cosa que debemos asegurarnos de hacer es agregar el selector `not (form)`, ya que los formularios controlados por plantilla intentarán aplicar una clase válida a un formulario automáticamente. -->
+     <!-- Entonces, como puede ver, la versión 'requerida' del campo no se generará a menos que la clave `= === 'q'`, y para cada una se renderizará como no requerida. -->
+     <input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]" required *ngIf="key === 'q'" appNoSpecialChars/>
+   <!-- <input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]" *ngIf="key !== 'q'" /> -->
+   <!-- A continuación, agregaremos lo mismo con nuestro starscampo como lo hicimos en las formas reactivas, excepto que agregaremos un valor minlengthy maxlength. El comportamiento de maxlengthes ligeramente diferente en forma de plantilla, ya que la versión HTML5 restringe la entrada en el campo antes de que ocurra cualquier validación. -->
+   <!-- Tenga en cuenta que tuvimos que agregar un condicional adicional a la última versión de la entrada, lo que dio como resultado la clave ""! == 'q' && key! == 'stars' "`. -->
+   <!-- Ahora que hemos creado nuestro validador personalizado, podemos volver a nuestro src/app/git-search/git-search.component.htmlarchivo y agregar el validador appNoSpecialChars a todos los campos. -->
+   <input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]" minlength='2' maxlength='4' *ngIf="key === 'stars'" appNoSpecialChars />
+   <input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]" *ngIf="key !== 'q' && key !== 'stars'" appNoSpecialChars />
 
-  <form (ngSubmit)="sendQuery()" [formGroup]= "form">
-    <div *ngFor="let key of modelKeys">
-       {{key}}<input placeholder="Enter {{key}} Here" formControlName="{{key}}"/>
-    </div>
-    <!-- También debemos agregar un pequeño cambio al botón para evitar el envío de datos incorrectos src/app/git-search/git-search.component.html. -->
-    <button type="submit" [disabled]="!form.valid">Submit</button>
-    </form>
-  
+<!-- <div *ngFor="let key of modelKeys">
+  </div> -->
+  </div>
+  <!-- Ahora podemos agregar el disabledatributo al botón de manera similar a la forma reactiva. -->
+  <!-- <button (click)="sendQuery()">Submit</button> -->
+  <button type="submit" [disabled]="!myForm.valid">Submit</button>
+  </form>
+
 
 <div *ngIf="searchResults else elseBlock">
   <h3 class="Total">Total Results: {{searchResults.total_count}}</h3>

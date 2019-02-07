@@ -34,14 +34,24 @@
 <!-- <button (click)="gitSearch()">Submit</button> -->
 <!-- <button (click)="sendQuery()">Submit</button> -->
 
+<!-- Bind a Reactive Form -->
+  <!-- Necesitamos modificar esto para usar el nuevo FormGroup. Para hacerlo, adjunte un [formGroup]enlace a la <form>etiqueta con el valor del formulario en su componente. Luego, agregue un formControlNameatributo que haga referencia al nombre del FormControlque hicimos, en este caso, la clave de la modelKeysiteración. -->
 
-<form>
+<!-- <form>
   <div *ngFor="let key of modelKeys">
      {{key}}<input name="{{key}}" placeholder="Enter {{key}} Here" [(ngModel)]="model[key]"/>
   </div>
   <button (click)="sendQuery()">Submit</button>
-  </form>
+  </form> -->
 
+  <form (ngSubmit)="sendQuery()" [formGroup]= "form">
+    <div *ngFor="let key of modelKeys">
+       {{key}}<input placeholder="Enter {{key}} Here" formControlName="{{key}}"/>
+    </div>
+    <!-- También debemos agregar un pequeño cambio al botón para evitar el envío de datos incorrectos src/app/git-search/git-search.component.html. -->
+    <button type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+  
 
 <div *ngIf="searchResults else elseBlock">
   <h3 class="Total">Total Results: {{searchResults.total_count}}</h3>
