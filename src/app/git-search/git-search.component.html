@@ -48,7 +48,8 @@
     <div *ngFor="let key of modelKeys">
        {{key}}<input placeholder="Enter {{key}} Here" formControlName="{{key}}"/>
     </div>
-    <button type="submit">Submit</button>
+    <!-- También debemos agregar un pequeño cambio al botón para evitar el envío de datos incorrectos src/app/git-search/git-search.component.html. -->
+    <button type="submit" [disabled]="!form.valid">Submit</button>
     </form>
   
 

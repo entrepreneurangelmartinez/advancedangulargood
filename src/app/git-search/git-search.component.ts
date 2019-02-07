@@ -3,7 +3,9 @@ import {GitSearchService} from '../git-search.service';
 import {GitSearch} from '../git-search';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {AdvancedSearchModel} from '../advanced-search-model';
-import {FormControl,FormGroup} from '@angular/forms';
+// Para agregar validadores incorporados a su formulario reactivo, primero debemos agregar el Validatorsa la @angular/formsdeclaración de importación.
+import {FormControl,FormGroup, Validators} from '@angular/forms';
+
 
 @Component({
   selector: 'app-git-search',
@@ -23,7 +25,17 @@ export class GitSearchComponent implements OnInit {
     // En este punto, en nuestro constructor, vamos a recorrer nuestro this.modelKeysy crear FormControlelementos para cada uno de ellos envueltos en un objeto más grande.
     // Esto creará un formControlsobjeto con todos los campos necesarios de nuestro modelo.
     this.modelKeys.forEach((key)=> {
-      this.formControls[key]= new FormControl();
+      // Implementación de validaciones
+      let validators=[];
+      if(key==='q') {
+        validators.push(Validators.required);
+      }
+      if(key==='stars') {
+        validators.push(Validators.maxLength(4));
+        // validators.push(Validators.minLength(1));
+      }
+      validators.push(this.noSpecialChars);
+      this.formControls[key]= new FormControl(this.model[key],validators);
     });
 
     // Ahora, vamos a crear un FormGroup para nuestro formulario. Lo instanciaremos con el formControlsobjeto que acabamos de hacer.
@@ -34,6 +46,16 @@ export class GitSearchComponent implements OnInit {
   model = new AdvancedSearchModel('', '', '', null, null, '');
   modelKeys= Object.keys(this.model) as Array<any>;
 
+  // Finalmente, agregaremos un validador personalizado para verificar si hay caracteres especiales en los campos. Comenzaremos haciendo una función que devuelva un objeto que indique que el campo no es válido o que es nulo si el elemento es válido (lo que estamos determinando al realizar una expresión regular contra un conjunto de caracteres no válidos)
+  noSpecialChars(c: FormControl) {
+    let REGEXP = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+
+    return REGEXP.test(c.value) ? {
+        validateEmail: {
+        valid: false
+        }
+    } : null;
+}
 
   ngOnInit() {
     // this.GitSearchService.gitSearch('angular').then( (response) => {
@@ -100,7 +122,12 @@ export class GitSearchComponent implements OnInit {
     this.modelKeys.forEach( (elem) => {
       console.log(this.form.value[elem]);
 
+      
+
+
       if(elem === 'q') {
+        // Entonces, simplemente los agregamos a nuestra FormControlinstanciación.
+        
         return false;
       }
       // if(this.model[elem]) {
